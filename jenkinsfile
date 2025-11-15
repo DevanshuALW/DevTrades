@@ -1,0 +1,27 @@
+pipeline {
+    agent any
+
+    stages {
+        stage('Clone') {
+            steps {
+                git branch: 'main',
+                    url: 'https://github.com/DevanshuALW/DevTrades.git'
+            }
+        }
+
+        stage('Build') {
+            steps {
+                echo "Building project..."
+            }
+        }
+
+        stage('Deploy to S3') {
+            steps {
+                sh '''
+                    aws s3 sync . s3://jenkins-self-building-bucket --delete
+                '''
+            }
+        }
+    }
+}
+
